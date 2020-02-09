@@ -319,4 +319,25 @@ describe('prismHighlight', () => {
     // Only validate the result2
     validateHtmlAsync(result2, done);
   });
+
+  it('caption', done => {
+    const input = [
+      'function fib(i){',
+      '  if (i <= 1) return i;',
+      '  return fib(i - 1) + fib(i - 2);',
+      '}'
+    ].join('\n');
+    const result = prismHighlight(input, { caption: 'Hello World', lang: 'js' });
+
+    // <figure>
+    result.should.contains('<figure><figcaption>Hello World</figcaption>');
+    result.should.contains('</figure>');
+    // Start Tag
+    result.should.contains('<pre class="line-numbers language-js" data-language="js">');
+    result.should.contains('<code class="language-js');
+    // End Tag
+    result.should.contains(endTag);
+
+    validateHtmlAsync(result, done);
+  });
 });
